@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ConcurrentQueueTest : MonoBehaviour
 {
@@ -13,12 +12,12 @@ public class ConcurrentQueueTest : MonoBehaviour
 
     private void OnGUI()
     {
-        if (GUI.Button(new Rect(10, 10, 1000, 500), "Test Normal Queue"))
+        if (GUI.Button(new Rect(10, 10, 300, 500), "Test Normal Queue"))
         {
             TestNormalQueue();
         }
 
-        if (GUI.Button(new Rect(10, 520, 1000, 500), "Test Concurrent Queue"))
+        if (GUI.Button(new Rect(10, 520, 300, 500), "Test Concurrent Queue"))
         {
             TestConcurrentQueue();
         }
