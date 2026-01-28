@@ -17,16 +17,17 @@ public class Calculator
         return a * b;
     }
 
-    public double Division(int dividend, int divisor)
+    public double? Division(int dividend, int divisor)
     {
-        double result = 0.0;
+        double? result = 0.0;
         try
         {
             result = dividend / divisor;
         }
         catch (DivideByZeroException e)
         {
-
+            Debug.LogException(e);
+            result = null;
         }
         return result;
     }
