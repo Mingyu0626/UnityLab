@@ -2,12 +2,12 @@ using System;
 using UnityEngine;
 public class Calculator
 {
-    public int Add(int a, int b)
+    public long Add(long a, long b)
     {
         return a + b;
     }
 
-    public int Subtract(int a, int b)
+    public long Subtract(long a, long b)
     {
         return a - b;
     }

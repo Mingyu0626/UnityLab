@@ -70,17 +70,16 @@ public class CalculatorTests
         return a + b;
     }
 
-
     [TestCase(5, 5, 10)]
     [TestCase(8, 4, 12)]
-    public void ProductionCirculatorAdd(int a, int b, int expected)
+    public void ProductionCirculatorAdd(int a, int b, long expected)
     {
         Assert.AreEqual(_calculator.Add(a, b), expected);
     }
 
     [TestCase(100, -78, 178)]
     [TestCase(-20, 4, -24)]
-    public void ProductionCirculatorSubtract(int a, int b, int expected)
+    public void ProductionCirculatorSubtract(int a, int b, long expected)
     {
         Assert.AreEqual(_calculator.Subtract(a, b), expected);
     }
