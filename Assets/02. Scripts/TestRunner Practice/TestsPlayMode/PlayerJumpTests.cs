@@ -8,28 +8,33 @@ public class PlayerJumpTests
     public class MockInput : IInputProvider
     {
         // 이 변수만 true로 바꾸면 인풋을 준 것과 똑같다.
-        public bool VirtualSpaceKey { get; set; } = false;
+        private bool _virtualSpaceKey = false;
+        public bool VirtualSpaceKey
+        {
+            get => _virtualSpaceKey; 
+            set => _virtualSpaceKey = value;
+        }
 
         public bool IsKeyPressed(KeyCode keyCode)
         {
-            return VirtualSpaceKey;
+            return _virtualSpaceKey;
         }
     }
 
-    public GameObject GO;
-    public PlayerJump PlayerJump;
+    private GameObject _gameObject;
+    private PlayerJump _playerJump;
 
     [SetUp]
     public void SetUp()
     {
-        GO = new GameObject();
-        PlayerJump = GO.AddComponent<PlayerJump>();
+        _gameObject = new GameObject();
+        _playerJump = _gameObject.AddComponent<PlayerJump>();
     }
 
     [TearDown]
     public void TearDown()
     {
-        Object.DestroyImmediate(GO);
+        Object.DestroyImmediate(_gameObject);
     }
 
     [UnityTest]
@@ -37,14 +42,14 @@ public class PlayerJumpTests
     {
         // 1. Arrange, 가짜 키보드 장착
         MockInput fakeInput = new MockInput();
-        PlayerJump.Initialize(fakeInput);
+        _playerJump.Initialize(fakeInput);
 
         // 2. Act
         fakeInput.VirtualSpaceKey = true;
         yield return null;
 
         // 3. Assert
-        Assert.IsTrue(PlayerJump.IsJumping, "키를 눌렀는데 점프하지 않음");
+        Assert.IsTrue(_playerJump.IsJumping, "키를 눌렀는데 점프하지 않음");
     }
 
     [UnityTest]
@@ -52,13 +57,13 @@ public class PlayerJumpTests
     {
         // 1. Arrange, 가짜 키보드 장착
         MockInput fakeInput = new MockInput();
-        PlayerJump.Initialize(fakeInput);
+        _playerJump.Initialize(fakeInput);
 
         // 2. Act
         fakeInput.VirtualSpaceKey = false;
         yield return null;
 
         // 3. Assert
-        Assert.IsFalse(PlayerJump.IsJumping, "키를 안 눌렀는데 점프함");
+        Assert.IsFalse(_playerJump.IsJumping, "키를 안 눌렀는데 점프함");
     }
 }
