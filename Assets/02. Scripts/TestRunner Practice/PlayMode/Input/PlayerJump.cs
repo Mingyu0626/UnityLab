@@ -1,15 +1,29 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerJump : MonoBehaviour
 {
-    public bool IsJumping { get; private set; } = false;
+    [SerializeField]
+    private float _jumpPower = 5f;
+    private bool _jumpRequested = false;
+    private bool _isJumping = false;
+    public bool IsJumping
+    {
+        get => _isJumping; set => _isJumping = value;
+    }
 
     private IInputProvider _input;
+    private Rigidbody _rigidbody;
 
     public void Initialize(IInputProvider inputProvider = null)
     {
         // 인수로 받은 IInputProvider가 없으면, 진짜 유니티 Input을 사용한다.
         _input = inputProvider ?? new UnityInputProvider();
+    }
+
+    private void Awake()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     private void Start()
@@ -24,13 +38,22 @@ public class PlayerJump : MonoBehaviour
     {
         if (_input.IsKeyPressed(KeyCode.Space))
         {
+            _jumpRequested = true;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (_jumpRequested)
+        {
             Jump();
         }
     }
 
     public void Jump()
     {
-        IsJumping = true;
-        Debug.Log("점프!");
+        _isJumping = true;
+        _rigidbody.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
+        _jumpRequested = false;
     }
 }
