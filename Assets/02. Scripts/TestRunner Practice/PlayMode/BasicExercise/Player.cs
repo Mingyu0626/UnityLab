@@ -1,7 +1,11 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public event Action OnDeath;
+    public event Action<int> OnHPChange;
+
     private int _hp = 100;
     public int HP { get => _hp; set => _hp = value; }
 
@@ -14,6 +18,7 @@ public class Player : MonoBehaviour
     public void TakeDamage(int damage)
     {
         _hp -= damage;
+        OnHPChange?.Invoke(_hp);
         if (_hp <= 0)
         {
             Die();
@@ -27,7 +32,6 @@ public class Player : MonoBehaviour
 
     private void Die()
     {
-        gameObject.SetActive(false);
-        Debug.Log("Player »ç¸Á");
+        OnDeath?.Invoke();
     }
 }

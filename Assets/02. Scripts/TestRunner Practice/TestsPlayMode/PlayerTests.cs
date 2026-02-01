@@ -58,17 +58,4 @@ public class PlayerTests
         Assert.Greater(_player.transform.position.z, 0f);
         Debug.Log($"0.5초 후 위치 : {_player.transform.position.z}");
     }
-
-    [Test]
-    public void TakeDamage_Dead_WhenHPIsZero()
-    {
-        // 1. Arrange
-        _player.HP = 10;
-
-        // 2. Act
-        _player.TakeDamage(10);
-
-        // 3. Assert
-        Assert.IsFalse(_playerGO.activeSelf, "HP가 0이 되었는데, 플레이어가 비활성화되지 않음");
-    }
 }
