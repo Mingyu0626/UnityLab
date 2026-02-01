@@ -5,21 +5,21 @@ using System.Collections;
 
 public class PlayerTests
 {
-    public GameObject GO { get; private set; }
-    public Player Player { get; private set; }
+    private GameObject _playerGO;
+    private Player _player;
     
     [SetUp]
     public void SetUp()
     {
         // 1. Arrange
-        GO = new GameObject("TestPlayer");
-        Player = GO.AddComponent<Player>();
+        _playerGO = new GameObject("TestPlayer");
+        _player = _playerGO.AddComponent<Player>();
     }
 
     [TearDown]
     public void TearDown()
     {
-        Object.DestroyImmediate(GO);
+        Object.DestroyImmediate(_playerGO);
     }
 
 
@@ -27,35 +27,48 @@ public class PlayerTests
     public void Player_TakeDamage_ReduceHP()
     {
         // 2. Act
-        Player.TakeDamage(10);
+        _player.TakeDamage(10);
         // 3. Assert
-        Assert.AreEqual(90, Player.HP);
+        Assert.AreEqual(90, _player.HP);
     }
 
     [Test]
     public void Player_Move_ChangesPosition()
     {
-        Player.transform.position = Vector3.zero;
+        _player.transform.position = Vector3.zero;
 
         // 2. Act
-        Player.Move(new Vector3(5, 0, 0));
+        _player.Move(new Vector3(5, 0, 0));
 
         // 3. Assert
-        Assert.AreEqual(new Vector3(5, 0, 0), Player.transform.position);
+        Assert.AreEqual(new Vector3(5, 0, 0), _player.transform.position);
     }
 
     [UnityTest]
     public IEnumerator Player_Update_MovesForward()
     {
         // 1. Arrange
-        Player.transform.position = Vector3.zero;
+        _player.transform.position = Vector3.zero;
 
         // 2. Act
         // 테스트에서의 시간 흐름은 WaitForSeconds로 제어한다.
         yield return new WaitForSeconds(0.5f);
 
         // 3. Assert
-        Assert.Greater(Player.transform.position.z, 0f);
-        Debug.Log($"0.5초 후 위치 : {Player.transform.position.z}");
+        Assert.Greater(_player.transform.position.z, 0f);
+        Debug.Log($"0.5초 후 위치 : {_player.transform.position.z}");
+    }
+
+    [Test]
+    public void TakeDamage_Dead_WhenHPIsZero()
+    {
+        // 1. Arrange
+        _player.HP = 10;
+
+        // 2. Act
+        _player.TakeDamage(10);
+
+        // 3. Assert
+        Assert.IsFalse(_playerGO.activeSelf, "HP가 0이 되었는데, 플레이어가 비활성화되지 않음");
     }
 }

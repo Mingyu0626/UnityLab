@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int HP { get; private set; } = 100;
+    private int _hp = 100;
+    public int HP { get => _hp; set => _hp = value; }
 
 
     private void Update()
@@ -12,11 +13,21 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        HP -= damage;
+        _hp -= damage;
+        if (_hp <= 0)
+        {
+            Die();
+        }
     }
 
     public void Move(Vector3 offset)
     {
         transform.position += offset;
+    }
+
+    private void Die()
+    {
+        gameObject.SetActive(false);
+        Debug.Log("Player »ç¸Á");
     }
 }
