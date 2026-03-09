@@ -1,4 +1,26 @@
 #!/bin/sh
 
-echo "Git Hook Test"
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+    against=HEAD
+else
+    against=$(git hash-object -t tree /dev/null)
+fi
+
+git diff --cached --name-only --diff-filter=A -z $against | while IFS= read -r -d '' filename; do
+    if [[ $filename == *"\\"* ]]; then
+        >&2 echo "[파일명 에러] \"${filename}\" 경로에 윈도우에서 사용할 수 없는 백슬래시(\\)가 포함되어 있습니다."
+        exit 1
+    fi
+done
+if [ $? -ne 0 ]; then exit 1; fi
+
+git diff --cached --name-only --diff-filter=A $against | grep "^Assets/" | grep -v "\.meta$" | while read filename; do
+    if ! git diff --cached --name-only | grep -q "^${filename}\.meta$"; then
+        >&2 echo "[메타 누락 에러] \"${filename}\" 에셋의 .meta 파일이 함께 체크되지 않았습니다!"
+        exit 1
+    fi
+done
+if [ $? -ne 0 ]; then exit 1; fi
+
 exit 0
